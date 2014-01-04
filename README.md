@@ -3,6 +3,8 @@ BlurBar
 
 Blurs the iOS 7 status bar on the home screen. Uses private API exposed in [CKBlurView](https://github.com/conradev/CKBlurView).
 
+![BlurBar](http://insanj.com/images/holder/blurbar.PNG)
+
 ---------------------------------------
 	Simplified BSD License
 	Copyright (c) 2014, Julian Weiss
