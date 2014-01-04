@@ -5,10 +5,6 @@
 //  Created by Conrad Kramer on 10/25/13.
 //  Copyright (c) 2013 Kramer Software Productions, LLC. All rights reserved.
 //
-//  MRC-Augmented by Julian Weiss on 1/4/14.
-//  Copyright (c) 2014 Julian Weiss.
-//  
-
 
 #import <UIKit/UIKit.h>
 

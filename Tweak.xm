@@ -5,45 +5,27 @@
 
 @interface UIStatusBarBackgroundView : UIView
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3;
--(void)dealloc;
-@end
-
-@interface UIStatusBarBackgroundView (BlurBar)
-+(CKBlurView *)sharedBlurBar;
 @end
 
 %hook UIStatusBarBackgroundView
-static CKBlurView *blurBar;
 
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3{
-	if(blurBar && CGRectContainsRect(blurBar.frame, arg1))
-		return %orig;
+	%orig;
 
-	UIStatusBarBackgroundView *bar = %orig;
-	blurBar = [[CKBlurView alloc] initWithFrame:arg1];
-	blurBar.blurRadius = 10.f;
-	blurBar.blurCroppingRect = blurBar.frame;
-	blurBar.alpha = 0.f;
-	[bar addSubview:blurBar];
-
-	__block CKBlurView *blockBar = blurBar;
 	[[NSNotificationCenter defaultCenter] addObserverForName:@"SBDeviceLockStateChangedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification){
-		NSLog(@"&&&& yo:%@, %@", notification, [notification.userInfo[@"kSBNotificationKeyState"] boolValue]?@"YES":@"NO");
 		if([notification.userInfo[@"kSBNotificationKeyState"] boolValue])
-			blockBar.alpha = 0.f;
+			[[self viewWithTag:1234] removeFromSuperview];
 
-		else
-			blockBar.alpha = 1.f;
+		else{
+			CKBlurView *blurBar = [[CKBlurView alloc] initWithFrame:self.frame];
+			blurBar.blurRadius = 10.f;
+			blurBar.blurCroppingRect = blurBar.frame;
+			blurBar.alpha = 1.0f;
+			blurBar.tag = 1234;
+			[self addSubview:blurBar];
+		}
 	}];
 
-	return bar;
-}
-
--(void)dealloc{	
-	NSLog(@"&&&&& dealloc");
-	blurBar = nil;
-	[blurBar release];
-
-	%orig;
+	return self;
 }
 %end
