@@ -12,19 +12,19 @@
 @end
 
 @interface SBDeviceLockController {
-	int _lockState; // 1locked, 0unlocked
+	int _lockState;
 }
 
 +(id)sharedController;
 @end
 
 @interface SBDeviceLockController (BlurBar)
--(BOOL)isLocked;
+-(BOOL)isUnlocked;
 @end
 
 %hook SBDeviceLockController
-%new -(BOOL)isLocked{
-	return (MSHookIvar<int>(self, "_lockState") == 1);
+%new -(BOOL)isUnlocked{
+	return (MSHookIvar<int>(self, "_lockState") != 1);
 }
 %end
 
@@ -34,17 +34,16 @@ static CKBlurView *blurBar;
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3{
 	UIStatusBarBackgroundView *view = %orig;
 
-	if(![[%c(SBDeviceLockController) sharedController] isLocked])
-		[blurBar removeFromSuperview];
+	if([[%c(SBDeviceLockController) sharedController] isUnlocked])
+		[UIView animateWithDuration:0.5f animations:^{ blurBar.alpha = 0.f; } completion:^(BOOL finished){ [blurBar removeFromSuperview]; }];
 
-	else{
-		//if(!blurBar || (blurBar && CGRectContainsRect(self.frame, blurBar.frame))){
-			blurBar = [[CKBlurView alloc] initWithFrame:self.frame];
-			blurBar.blurRadius = 10.f;
-			blurBar.blurCroppingRect = blurBar.frame;
-			blurBar.alpha = 1.f;
-			[view addSubview:blurBar];
-		//}
+	else if(arg1.size.height <= 20.f){
+		blurBar = [[CKBlurView alloc] initWithFrame:self.frame];
+		blurBar.blurRadius = 10.f;
+		blurBar.blurCroppingRect = blurBar.frame;
+		blurBar.alpha = 0.f;
+		[view addSubview:blurBar];
+		[UIView animateWithDuration:0.5f animations:^{ blurBar.alpha = 1.f; }];
 	}
 
 	return view;
