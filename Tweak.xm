@@ -7,11 +7,12 @@
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3;
 @end
 
-
 %hook UIStatusBarBackgroundView
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3{
 	UIStatusBarBackgroundView *bar = %orig;
-	CKBlurView *blurBar = [[CKBlurView alloc] initWithFrame:CGRectMake(0, -2, fmax([[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height), 10.f)];
+	CKBlurView *blurBar = [[CKBlurView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 20)];
+	blurBar.blurRadius = 20;
+	blurBar.blurCroppingRect = blurBar.frame;
 	[bar addSubview:blurBar];
 
 	return bar;
