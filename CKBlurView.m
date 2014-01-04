@@ -5,6 +5,9 @@
 //  Created by Conrad Kramer on 10/25/13.
 //  Copyright (c) 2013 Kramer Software Productions, LLC. All rights reserved.
 //
+//  MRC-Augmented by Julian Weiss on 1/4/14.
+//  Copyright (c) 2014 Julian Weiss.
+//  
 
 #import <QuartzCore/QuartzCore.h>
 
@@ -43,11 +46,11 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
 
 @implementation CKBlurView
 
-+ (Class)layerClass {
++(Class)layerClass {
     return [CABackdropLayer class];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
+-(instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
         CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
@@ -60,37 +63,46 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
     return self;
 }
 
-- (void)setQuality:(NSString *)quality {
+-(void)setQuality:(NSString *)quality{
     [self.blurFilter setValue:quality forKey:CKBlurViewQualityKey];
 }
 
-- (NSString *)quality {
+-(NSString *)quality{
     return [self.blurFilter valueForKey:CKBlurViewQualityKey];
 }
 
-- (void)setBlurRadius:(CGFloat)radius {
+-(void)setBlurRadius:(CGFloat)radius{
     [self.blurFilter setValue:@(radius) forKey:CKBlurViewRadiusKey];
 }
 
-- (CGFloat)blurRadius {
+-(CGFloat)blurRadius{
     return [[self.blurFilter valueForKey:CKBlurViewRadiusKey] floatValue];
 }
 
-- (void)setBlurCroppingRect:(CGRect)croppingRect {
+-(void)setBlurCroppingRect:(CGRect)croppingRect{
     [self.blurFilter setValue:[NSValue valueWithCGRect:croppingRect] forKey:CKBlurViewBoundsKey];
 }
 
-- (CGRect)blurCroppingRect {
+-(CGRect)blurCroppingRect{
     NSValue *value = [self.blurFilter valueForKey:CKBlurViewBoundsKey];
     return value ? [value CGRectValue] : CGRectNull;
 }
 
-- (void)setBlurEdges:(BOOL)blurEdges {
+-(void)setBlurEdges:(BOOL)blurEdges{
     [self.blurFilter setValue:@(!blurEdges) forKey:CKBlurViewHardEdgesKey];
 }
 
-- (BOOL)blurEdges {
+-(BOOL)blurEdges{
     return ![[self.blurFilter valueForKey:CKBlurViewHardEdgesKey] boolValue];
+}
+
+-(void)dealloc{
+    _blurFilter = nil;
+    _blurQuality = nil;
+
+    [_blurFilter release];
+    [_blurQuality release];
+    [super dealloc];
 }
 
 @end
