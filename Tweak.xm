@@ -7,40 +7,51 @@
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3;
 @end
 
+@interface UIStatusBarBackgroundView (BlurBar)
+-(void)lockStateChanged:(NSNotification *)notification;
+@end
+
 %hook UIStatusBarBackgroundView
-CKBlurView *blurBar;
-NSNotification *lastNotification;
+
+%new -(void)lockStateChanged:(NSNotification *)notification{
+	CKBlurView *blurBar = objc_getAssociatedObject(self, @"blurBar");
+	NSLog(@"&&&&& in here with %@, %@", notification, blurBar);
+
+	if([notification.userInfo[@"kSBNotificationKeyState"] boolValue])
+		blurBar.alpha = 0.5f;
+	else{
+		NSLog(@"&&&&& else");
+		blurBar.alpha = 1.0f;
+	}
+
+	NSLog(@"&&&&& back to  %@, %@", notification, blurBar);
+}
 
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3{
-	%orig;
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(lockStateChanged:) name:@"SBDeviceLockStateChangedNotification" object:nil];
 
-	blurBar = [[CKBlurView alloc] initWithFrame:self.frame];
+	CKBlurView *blurBar = [[CKBlurView alloc] initWithFrame:self.frame];
+	CKBlurView *loadBar = objc_getAssociatedObject(self, @"blurBar");
+	if([objc_getAssociatedObject(self, @"savedBar") boolValue]){
+		if(!CGRectContainsRect(loadBar.frame, blurBar.frame))
+			blurBar = loadBar;
+	}
+
+	else
+		objc_setAssociatedObject(self, @"savedBar", @(YES), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+	UIStatusBarBackgroundView *view = %orig;
 	blurBar.blurRadius = 10.f;
 	blurBar.blurCroppingRect = blurBar.frame;
-	blurBar.alpha = 0.1f;
-	blurBar.tag = 1234;
-	[self addSubview:blurBar];
+	blurBar.alpha = 0.5f;
+	[view addSubview:blurBar];
 
-	__block CKBlurView *blockBar = [blurBar retain];
-	__block NSNotification *blockLast = [lastNotification retain];
-	[[NSNotificationCenter defaultCenter] addObserverForName:@"SBDeviceLockStateChangedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification){
-		if(!blockLast || ![notification isEqual:blockLast]){
-			blockLast = notification;
-			if([notification.userInfo[@"kSBNotificationKeyState"] boolValue])
-				blockBar.alpha = 0.1f;
-
-			else
-				blockBar.alpha = 1.0f;
-		}
-	}];
-
-	return self;
+	objc_setAssociatedObject(self, @"blurBar", blurBar, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	return view;
 }
 
 -(void)dealloc{
-	blurBar = nil;
-	[blurBar release];
-
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	%orig;
 }
 %end
