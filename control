@@ -8,3 +8,4 @@ Description: Blur status bar on homescreen.
 Maintainer: Julian Weiss <me@insanj.com>
 Author: Julian (insanj) Weiss
 Section: Tweaks
+Icon: file:///Library/PreferenceBundles/BlurBarPreferences.bundle/icon@2x.png
