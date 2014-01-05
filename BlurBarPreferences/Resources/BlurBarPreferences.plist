@@ -8,6 +8,7 @@
 		<dict>
 			<key>cell</key>			<string>PSGroupCell</string>
 			<key>label</key>		<string>Adjustments</string>
+			<key>footerText</key> 	<string>Lock and unlock your device to guarantee effects are applied.</string>
 		</dict>
 
 		<dict>
@@ -121,6 +122,28 @@
  			 	<integer>16</integer>
  			 	<integer>17</integer>
  				<integer>18</integer>
+ 			</array>
+		</dict>
+
+		<dict>
+			<key>cell</key>  		<string>PSLinkListCell</string>
+			<key>defaults</key> 	<string>com.insanj.blurbar</string>
+ 			<key>detail</key> 		<string>PSListItemsController</string>
+ 			<key>key</key> 			<string>tintAlpha</string>
+ 			<key>label</key> 		<string>Tint Intensity</string>
+ 			<key>validTitles</key> <array>
+ 				<string>Miniscule</string>
+ 				<string>Quarter</string>
+ 				<string>Half</string>
+ 				<string>Three-Quarters</string>
+ 				<string>Full (Default)</string>
+ 			</array>
+ 			<key>validValues</key> <array>
+ 				<real>0.1</real>
+ 				<real>0.25</real>
+ 				<real>0.5</real>
+ 				<real>0.75</real>
+ 				<real>1.0</real>
  			</array>
 		</dict>
 

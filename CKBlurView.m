@@ -17,12 +17,6 @@
 
 @end
 
-@interface CAFilter : NSObject
-
-+ (instancetype)filterWithName:(NSString *)name;
-
-@end
-
 @interface CKBlurView ()
 
 @property (retain, nonatomic) CAFilter *blurFilter;
@@ -68,14 +62,10 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
 }
 
 // Implemented for blur color (BlurBar)
--(instancetype)initWithFrame:(CGRect)frame andColor:(UIColor *)givenColor{
+-(instancetype)initWithFrame:(CGRect)frame andColorFilter:(CAFilter *)color{
     self = [super initWithFrame:frame];
     if (self) {
         CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
-
-        CAFilter *color = [CAFilter filterWithName:@"colorAdd"];
-        const CGFloat *rgb = CGColorGetComponents(givenColor.CGColor);
-        [color setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(1.0f)] forKey:@"inputColor"];
 
         self.layer.filters = @[ color, filter ];
         self.colorFilter = color;

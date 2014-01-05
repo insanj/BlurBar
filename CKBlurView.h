@@ -12,6 +12,13 @@
 
 #import <UIKit/UIKit.h>
 
+
+@interface CAFilter : NSObject
+
++ (instancetype)filterWithName:(NSString *)name;
+
+@end
+
 extern NSString * const CKBlurViewQualityDefault;
 
 extern NSString * const CKBlurViewQualityLow;
@@ -38,5 +45,5 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface CKBlurView : UIView
  */
 @property (nonatomic, readwrite) BOOL blurEdges;
 
--(instancetype)initWithFrame:(CGRect)frame andColor:(UIColor *)givenColor;
+-(instancetype)initWithFrame:(CGRect)frame andColorFilter:(id)color;
 @end

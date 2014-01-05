@@ -41,11 +41,19 @@ static CKBlurView *blurBar;
 
 	else if(arg1.size.height <= 20.f){
 		NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]];
-		
-		float blurAmount = [[settings objectForKey:@"blurAmount"] floatValue]==0?10.0f:[[settings objectForKey:@"blurAmount"] floatValue];
+
+		float blurAmount = [[settings objectForKey:@"blurAmount"] floatValue];
+		if(blurAmount == 0.f)
+			blurAmount = 10.0f;
+
 		CGRect blurFrame = view.frame;
-		blurFrame.size.height *= [[settings objectForKey:@"blurSize"] floatValue]==0?1.0f:[[settings objectForKey:@"blurSize"] floatValue];
-		float blurAlpha = [[settings objectForKey:@"blurAlpha"] floatValue]==0?1.0f:[[settings objectForKey:@"blurAlpha"] floatValue];
+		float blurSize = [[settings objectForKey:@"blurSize"] floatValue];
+		if(blurSize > 0.f)
+			blurFrame.size.height *= blurSize;
+		
+		float blurAlpha = [[settings objectForKey:@"blurAlpha"] floatValue];
+		if(blurAlpha == 0.f)
+			blurAlpha = 1.0f;
 
 		UIColor *blurTint; //Thanks, http://clrs.cc!
 		switch([[settings objectForKey:@"blurTint"] intValue]){
@@ -105,23 +113,26 @@ static CKBlurView *blurBar;
 				break;	
 		}
 
+		CGFloat tintAlpha = [[settings objectForKey:@"tintAlpha"] floatValue];
+		if(tintAlpha == 0.f)
+			tintAlpha = 1.0f;
 
-		CKBlurView __block *previous = blurBar;
-		blurBar = [[CKBlurView alloc] initWithFrame:blurFrame andColor:blurTint];
+		[blurBar removeFromSuperview];
+		
+        const CGFloat *rgb = CGColorGetComponents(blurTint.CGColor);
+        CAFilter *tintFilter = [CAFilter filterWithName:@"colorAdd"];
+        [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(tintAlpha)] forKey:@"inputColor"];
+
+		blurBar = [[CKBlurView alloc] initWithFrame:blurFrame andColorFilter:tintFilter];
 		blurBar.blurRadius = blurAmount;
 		blurBar.blurCroppingRect = blurFrame;
 		blurBar.alpha = 0.0f;
 		[view addSubview:blurBar];
+
+		NSLog(@"finished: amount:%f, frame:%@, alpha:%f, tint:%@, coloralpha:%@", blurAmount, NSStringFromCGRect(blurFrame), blurAlpha, blurTint, @(tintAlpha));
 		[UIView animateWithDuration:0.5f animations:^{
 			blurBar.alpha = blurAlpha; 
-			previous.alpha = 0.f;
-		} completion:^(BOOL finished){
-			[previous removeFromSuperview];
-			previous = nil;
-			[previous release];
 		}];
-
-		NSLog(@"finished: %f, %@, %f, %@, %@", blurAmount, NSStringFromCGRect(blurFrame), blurAlpha, blurTint, previous);
 	}
 
 	return view;
