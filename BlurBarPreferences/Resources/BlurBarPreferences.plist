@@ -98,9 +98,7 @@
  			 	<string>Orange</string>
  			 	<string>Purple</string>
  			 	<string>Red</string>
- 			 	<string>Silver</string>
  			 	<string>Teal</string>
- 			 	<string>White</string>
  				<string>Yellow</string>
  			</array>
  			<key>validValues</key> <array>
@@ -119,9 +117,7 @@
  			 	<integer>13</integer>
  			 	<integer>14</integer>
  			 	<integer>15</integer>
- 			 	<integer>16</integer>
- 			 	<integer>17</integer>
- 				<integer>18</integer>
+ 				<integer>16</integer>
  			</array>
 		</dict>
 
