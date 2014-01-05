@@ -2,7 +2,7 @@ Package: com.insanj.blurbar
 Name: BlurBar
 Pre-Depends: firmware (>= 7.0)
 Depends: mobilesubstrate 
-Version: 1.1
+Version: 1.1~beta
 Architecture: iphoneos-arm
 Description: Blur status bar on homescreen.
 Maintainer: Julian Weiss <me@insanj.com>

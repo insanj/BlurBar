@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>items</key>
+	<array>
+
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key>		<string>Adjustments</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>  		<string>PSLinkListCell</string>
+			<key>defaults</key> 	<string>com.insanj.blurbar</string>
+ 			<key>detail</key> 		<string>PSListItemsController</string>
+ 			<key>key</key> 			<string>blurAmount</string>
+ 			<key>label</key> 		<string>Blur Amount</string>
+ 			<key>validTitles</key> <array>
+ 				<string>Miniscule</string>
+ 				<string>Small</string>
+ 				<string>Medium (Default)</string>
+ 				<string>Large</string>
+ 				<string>Massive</string>
+ 			</array>
+ 			<key>validValues</key>
+ 			<array>
+				<real>1</real>
+ 				<real>5</real>
+ 				<real>10</real>
+ 				<real>20</real>
+ 				<real>50</real>
+ 			</array>
+		</dict>
+
+		<dict>
+			<key>cell</key>  		<string>PSLinkListCell</string>
+			<key>defaults</key> 	<string>com.insanj.blurbar</string>
+ 			<key>detail</key> 		<string>PSListItemsController</string>
+ 			<key>key</key> 			<string>blurSize</string>
+ 			<key>label</key> 		<string>Blur Size</string>
+ 			<key>validTitles</key> <array>
+ 				<string>Quarter</string>
+ 				<string>Half</string>
+ 				<string>Full (Default)</string>
+ 				<string>Double</string>
+ 			</array>
+ 			<key>validValues</key> <array>
+ 				<real>0.25</real>
+ 				<real>0.5</real>
+ 				<real>1</real>
+ 				<real>2</real>
+ 			</array>
+ 			<key>default</key> 		<string>Full</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>  		<string>PSLinkListCell</string>
+			<key>defaults</key> 	<string>com.insanj.blurbar</string>
+ 			<key>detail</key> 		<string>PSListItemsController</string>
+ 			<key>key</key> 			<string>blurAlpha</string>
+ 			<key>label</key> 		<string>Blur Opacity</string>
+ 			<key>validTitles</key> <array>
+ 				<string>Miniscule</string>
+ 				<string>Quarter</string>
+ 				<string>Half</string>
+ 				<string>Three-Quarters</string>
+ 				<string>Full (Default)</string>
+ 			</array>
+ 			<key>validValues</key> <array>
+ 				<real>0.1</real>
+ 				<real>0.25</real>
+ 				<real>0.5</real>
+ 				<real>0.75</real>
+ 				<real>1.0</real>
+ 			</array>
+		</dict>
+
+		<dict>
+			<key>cell</key>  		<string>PSLinkListCell</string>
+			<key>defaults</key> 	<string>com.insanj.blurbar</string>
+ 			<key>detail</key> 		<string>PSListItemsController</string>
+ 			<key>key</key> 			<string>blurTint</string>
+ 			<key>label</key> 		<string>Blur Tint</string>
+ 			<key>validTitles</key> <array>
+ 				<string>Aqua</string>
+ 				<string>Black</string>
+ 			 	<string>Blue</string>
+ 			  	<string>Clear (default)</string>
+ 			  	<string>Fuchsia</string>
+ 			  	<string>Grey</string>
+ 			 	<string>Green</string>
+ 			 	<string>Lime</string>
+ 			 	<string>Maroon</string>
+ 			 	<string>Navy</string>
+ 			 	<string>Olive</string>
+ 			 	<string>Orange</string>
+ 			 	<string>Purple</string>
+ 			 	<string>Red</string>
+ 			 	<string>Silver</string>
+ 			 	<string>Teal</string>
+ 			 	<string>White</string>
+ 				<string>Yellow</string>
+ 			</array>
+ 			<key>validValues</key> <array>
+				<integer>1</integer>
+ 				<integer>2</integer>
+ 			 	<integer>3</integer>
+ 			  	<integer>4</integer>
+ 			  	<integer>5</integer>
+ 			  	<integer>6</integer>
+ 			 	<integer>7</integer>
+ 			 	<integer>8</integer>
+ 			 	<integer>9</integer>
+ 			 	<integer>10</integer>
+ 			 	<integer>11</integer>
+ 			 	<integer>12</integer>
+ 			 	<integer>13</integer>
+ 			 	<integer>14</integer>
+ 			 	<integer>15</integer>
+ 			 	<integer>16</integer>
+ 			 	<integer>17</integer>
+ 				<integer>18</integer>
+ 			</array>
+		</dict>
+
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key> 		<string>Contact</string>
+			<key>footerText</key>	<string>Thanks for using BlurBar! You're running full release 1.1</string>
+		</dict>
+
+		<dict>
+			<key>cell</key> 		<string>PSButtonCell</string>
+			<key>label</key> 		<string>Support &amp; Feedback</string>
+			<key>action</key> 		<string>mail</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>			<string>PSButtonCell</string>
+			<key>label</key>		<string>@insanj</string>
+			<key>action</key>  		<string>twitter</string>
+		</dict>
+
+		<dict>
+			<key>cell</key> 		<string>PSGroupCell</string>
+			<key>footerText</key> 	<string>(CC) 2014 Julian Weiss&#10;License and source available online.</string>
+			<key>footerAlignment</key> 	<integer>1</integer>
+		</dict>
+	</array>
+	<key>title</key>	<string>BlurBar</string>
+</dict>
+</plist>

@@ -27,9 +27,13 @@
 
 @property (retain, nonatomic) CAFilter *blurFilter;
 
+@property (retain, nonatomic) CAFilter *colorFilter; // Part of blur color (BlurBar)
+
 @end
 
 extern NSString * const kCAFilterGaussianBlur;
+
+extern NSString * const kCAFilterMultiplyColor; // Part of blur color (BlurBar)
 
 NSString * const CKBlurViewQualityDefault = @"default";
 
@@ -50,11 +54,31 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
     return [CABackdropLayer class];
 }
 
--(instancetype)initWithFrame:(CGRect)frame {
+-(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     if (self) {
         CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
         self.layer.filters = @[ filter ];
+        self.blurFilter = filter;
+
+        self.blurQuality = CKBlurViewQualityDefault;
+        self.blurRadius = 5.0f;        
+    }
+    return self;
+}
+
+// Implemented for blur color (BlurBar)
+-(instancetype)initWithFrame:(CGRect)frame andColor:(UIColor *)givenColor{
+    self = [super initWithFrame:frame];
+    if (self) {
+        CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
+
+        CAFilter *color = [CAFilter filterWithName:@"colorAdd"];
+        const CGFloat *rgb = CGColorGetComponents(givenColor.CGColor);
+        [color setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(1.0f)] forKey:@"inputColor"];
+
+        self.layer.filters = @[ color, filter ];
+        self.colorFilter = color;
         self.blurFilter = filter;
 
         self.blurQuality = CKBlurViewQualityDefault;

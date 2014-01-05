@@ -38,4 +38,5 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface CKBlurView : UIView
  */
 @property (nonatomic, readwrite) BOOL blurEdges;
 
+-(instancetype)initWithFrame:(CGRect)frame andColor:(UIColor *)givenColor;
 @end

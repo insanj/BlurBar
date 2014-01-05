@@ -4,3 +4,4 @@ _
 obj
 *.o
 .DS_Store
+*.stamp
