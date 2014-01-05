@@ -58,12 +58,12 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
 }
 
 // Implemented for blur color (BlurBar)
--(instancetype)initWithFrame:(CGRect)frame andColorFilters:(NSArray *)colors{
+-(instancetype)initWithFrame:(CGRect)frame andColorFilter:(CAFilter *)color{
     self = [super initWithFrame:frame];
     if (self) {
         CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
 
-        self.layer.filters = [colors arrayByAddingObject:filter];
+        self.layer.filters = @[ color, filter ];
         self.blurFilter = filter;
 
         self.blurQuality = CKBlurViewQualityDefault;

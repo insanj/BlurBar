@@ -122,31 +122,10 @@
 		</dict>
 
 		<dict>
-			<key>cell</key>  		<string>PSLinkListCell</string>
-			<key>defaults</key> 	<string>com.insanj.blurbar</string>
- 			<key>detail</key> 		<string>PSListItemsController</string>
- 			<key>key</key> 			<string>tintAlpha</string>
- 			<key>label</key> 		<string>Tint Intensity</string>
- 			<key>validTitles</key> <array>
- 				<string>Miniscule</string>
- 				<string>Quarter</string>
- 				<string>Half</string>
- 				<string>Three-Quarters</string>
- 				<string>Full (Default)</string>
- 			</array>
- 			<key>validValues</key> <array>
- 				<real>0.1</real>
- 				<real>0.25</real>
- 				<real>0.5</real>
- 				<real>0.75</real>
- 				<real>1.0</real>
- 			</array>
-		</dict>
-
-		<dict>
-			<key>cell</key>			<string>PSGroupCell</string>
-			<key>label</key> 		<string>Contact</string>
-			<key>footerText</key>	<string>Thanks for using BlurBar! You're running full release 1.1</string>
+			<key>cell</key>				<string>PSGroupCell</string>
+			<key>label</key> 			<string>Contact</string>
+			<key>footerAlignment</key> 	<integer>1</integer>
+			<key>footerText</key>		<string>Thanks for using BlurBar (1.1)!&#10;&#10;(CC) 2014 Julian Weiss&#10;License and source available online.</string>
 		</dict>
 
 		<dict>
@@ -161,11 +140,6 @@
 			<key>action</key>  		<string>twitter</string>
 		</dict>
 
-		<dict>
-			<key>cell</key> 		<string>PSGroupCell</string>
-			<key>footerText</key> 	<string>(CC) 2014 Julian Weiss&#10;License and source available online.</string>
-			<key>footerAlignment</key> 	<integer>1</integer>
-		</dict>
 	</array>
 	<key>title</key>	<string>BlurBar</string>
 </dict>

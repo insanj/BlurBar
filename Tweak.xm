@@ -115,19 +115,15 @@ static CKBlurView *blurBar;
 		
         const CGFloat *rgb = CGColorGetComponents(blurTint.CGColor);
         CAFilter *tintFilter = [CAFilter filterWithName:@"colorAdd"];
-        [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(1.0f)] forKey:@"inputColor"];
+        [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(CGColorGetAlpha(blurTint.CGColor))] forKey:@"inputColor"];
  		
- 		CAFilter *intensity = [CAFilter filterWithName:@"colorSubtract"];
-        [intensity setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(fmod(tintAlpha, 1.0f))] forKey:@"inputColor"];
-
-		blurBar = [[CKBlurView alloc] initWithFrame:blurFrame andColorFilters:@[intensity, tintFilter]];
+		blurBar = [[CKBlurView alloc] initWithFrame:blurFrame andColorFilter:tintFilter];
 		blurBar.blurRadius = blurAmount;
 		blurBar.blurCroppingRect = blurFrame;
 		blurBar.alpha = 0.f;
 		[view addSubview:blurBar];
 
-		NSLog(@"finished: amount:%f, frame:%@, alpha:%f, tint:%@, coloralpha:%@, intensity:%@", blurAmount, NSStringFromCGRect(blurFrame), blurAlpha, tintFilter, @(tintAlpha), intensity);
-		[UIView animateWithDuration:0.5f animations:^{
+		[UIView animateWithDuration:0.1f animations:^{
 			blurBar.alpha = blurAlpha; 
 		}];
 	}
