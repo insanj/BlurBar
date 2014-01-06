@@ -12,7 +12,7 @@
 @interface UIStatusBarBackgroundView (BlurBar)
 -(void)lockStateChanged:(NSNotification *)notification;
 @end
-
+/*
 @interface SBDeviceLockController {
 	int _lockState;
 }
@@ -29,17 +29,22 @@
 	return (MSHookIvar<int>(self, "_lockState") != 1);
 }
 %end
-
-static CKBlurView *blurBar;
+*/
 
 %hook UIStatusBarBackgroundView
+static CKBlurView *blurBar;
+
+%new -(CKBlurView *)blurBar{
+	return blurBar;
+}
+
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3{
 	UIStatusBarBackgroundView *view = %orig;
 
-	if([[%c(SBDeviceLockController) sharedController] isUnlocked])
-		[UIView animateWithDuration:0.5f animations:^{ blurBar.alpha = 0.f; } completion:^(BOOL finished){ [blurBar removeFromSuperview]; }];
+	//if([[%c(SBDeviceLockController) sharedController] isUnlocked])
+	//	[UIView animateWithDuration:0.5f animations:^{ blurBar.alpha = 0.f; } completion:^(BOOL finished){ [blurBar removeFromSuperview]; }];
 
-	else if(arg1.size.height <= 20.f){
+	if(arg1.size.height <= 20.f){
 		NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]];
 
 		float blurAmount = [[settings objectForKey:@"blurAmount"] floatValue];
@@ -116,12 +121,20 @@ static CKBlurView *blurBar;
         const CGFloat *rgb = CGColorGetComponents(blurTint.CGColor);
         CAFilter *tintFilter = [CAFilter filterWithName:@"colorAdd"];
         [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(CGColorGetAlpha(blurTint.CGColor))] forKey:@"inputColor"];
- 		
-		blurBar = [[CKBlurView alloc] initWithFrame:blurFrame andColorFilter:tintFilter];
+
+        if(!blurBar)
+			blurBar = [[CKBlurView alloc] initWithFrame:blurFrame andColorFilter:tintFilter];
+		else{
+			blurBar.frame = blurFrame;
+			[blurBar setColorFilter:tintFilter];
+		}
+
 		blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		blurBar.blurRadius = blurAmount;
 		blurBar.blurCroppingRect = blurFrame;
-		blurBar.alpha = blurAlpha;
+		blurBar.userAlpha = blurAlpha;
+		blurBar.alpha = blurBar.shouldBeHidden?0.f:blurBar.userAlpha;
+
 		[view addSubview:blurBar];
 	}
 

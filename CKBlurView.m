@@ -21,6 +21,8 @@
 
 @property (retain, nonatomic) CAFilter *blurFilter;
 
+@property (retain, nonatomic) CAFilter *colorFilter;
+
 @end
 
 extern NSString * const kCAFilterGaussianBlur;
@@ -63,13 +65,19 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
     if (self) {
         CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
 
-        self.layer.filters = @[ color, filter ];
         self.blurFilter = filter;
+        self.colorFilter = color;
+        self.layer.filters = @[ self.colorFilter , self.blurFilter ];
 
         self.blurQuality = CKBlurViewQualityDefault;
         self.blurRadius = 5.0f;        
     }
     return self;
+}
+
+-(void)setColorFilter:(CAFilter *)filter{
+    self.colorFilter = filter;
+    self.layer.filters = @[ self.colorFilter , self.blurFilter ];
 }
 
 -(void)setQuality:(NSString *)quality{

@@ -45,5 +45,9 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface CKBlurView : UIView
  */
 @property (nonatomic, readwrite) BOOL blurEdges;
 
+@property (nonatomic, readwrite) BOOL shouldBeHidden;
+@property (nonatomic, readwrite) float userAlpha;
+
 -(instancetype)initWithFrame:(CGRect)frame andColorFilter:(CAFilter *)color;
+-(void)setColorFilter:(CAFilter *)filter;
 @end
