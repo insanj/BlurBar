@@ -118,15 +118,11 @@ static CKBlurView *blurBar;
         [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(CGColorGetAlpha(blurTint.CGColor))] forKey:@"inputColor"];
  		
 		blurBar = [[CKBlurView alloc] initWithFrame:blurFrame andColorFilter:tintFilter];
-		blurBar.autoresizingMask = view.autoresizingMask;
+		blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		blurBar.blurRadius = blurAmount;
 		blurBar.blurCroppingRect = blurFrame;
-		blurBar.alpha = 0.f;
+		blurBar.alpha = blurAlpha;
 		[view addSubview:blurBar];
-
-		[UIView animateWithDuration:0.1f animations:^{
-			blurBar.alpha = blurAlpha; 
-		}];
 	}
 
 	return view;
