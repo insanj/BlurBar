@@ -68,6 +68,6 @@
 }//end twitter
 
 -(void)mail{
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:me%40insanj.com?subject=BlurBar%20(1.1)%20Support"]];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:me%40insanj.com?subject=BlurBar%20(1.2)%20Support"]];
 }
 @end

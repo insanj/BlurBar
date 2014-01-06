@@ -65,9 +65,9 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
     if (self) {
         CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
 
+        self.layer.filters = @[ filter , color ];
         self.blurFilter = filter;
         self.colorFilter = color;
-        self.layer.filters = @[ self.colorFilter , self.blurFilter ];
 
         self.blurQuality = CKBlurViewQualityDefault;
         self.blurRadius = 5.0f;        
@@ -75,10 +75,11 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
     return self;
 }
 
--(void)setColorFilter:(CAFilter *)filter{
+-(void)setTintColorFilter:(CAFilter *)filter{
     self.colorFilter = filter;
     self.layer.filters = @[ self.colorFilter , self.blurFilter ];
 }
+
 
 -(void)setQuality:(NSString *)quality{
     [self.blurFilter setValue:quality forKey:CKBlurViewQualityKey];
@@ -115,9 +116,11 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
 
 -(void)dealloc{
     _blurFilter = nil;
+    _colorFilter = nil;
     _blurQuality = nil;
 
     [_blurFilter release];
+    [_colorFilter release];
     [_blurQuality release];
     [super dealloc];
 }

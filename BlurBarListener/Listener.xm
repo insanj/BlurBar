@@ -3,7 +3,7 @@
 #import "../CKBlurView.h"
 
 @interface UIStatusBarBackgroundView
--(CKBlurView *)blurBar;
+-(void)toggleHidden;
 @end
 
 @interface BlurBarListener : NSObject <LAListener>
@@ -12,13 +12,7 @@
 @implementation BlurBarListener
 
 -(void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
-	CKBlurView *blurBar = [%c(UIStatusBarBackgroundView) blurBar];
-	blurBar.shouldBeHidden = !blurBar.shouldBeHidden;
-
-	if(blurBar.shouldBeHidden)
-		blurBar.alpha = 0.f;
-	else
-		blurBar.alpha = blurBar.userAlpha;
+	[%c(UIStatusBarBackgroundView) toggleHidden];
 }
 
 -(void)activator:(LAActivator *)activator abortEvent:(LAEvent *)event {
