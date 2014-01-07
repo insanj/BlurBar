@@ -46,40 +46,31 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
     return [CABackdropLayer class];
 }
 
--(instancetype)initWithFrame:(CGRect)frame{
-    self = [super initWithFrame:frame];
-    if (self) {
-        CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
-        self.layer.filters = @[ filter ];
-        self.blurFilter = filter;
+-(CKBlurView *)commonInit{
+    CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
+    self.layer.filters = @[ filter ];
+    self.blurFilter = filter;
 
-        self.blurQuality = CKBlurViewQualityDefault;
-        self.blurRadius = 5.0f;        
-    }
+    self.blurQuality = CKBlurViewQualityDefault;
+    self.blurRadius = 5.0f;   
+
     return self;
 }
 
-// Implemented for blur color (BlurBar)
--(instancetype)initWithFrame:(CGRect)frame andColorFilter:(CAFilter *)color{
+-(instancetype)init{
+    self = [super init];
+    return [self commonInit];
+}
+
+-(instancetype)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
-    if (self) {
-        CAFilter *filter = [CAFilter filterWithName:kCAFilterGaussianBlur];
-
-        self.layer.filters = @[ filter , color ];
-        self.blurFilter = filter;
-        self.colorFilter = color;
-
-        self.blurQuality = CKBlurViewQualityDefault;
-        self.blurRadius = 5.0f;        
-    }
-    return self;
+    return [self commonInit];
 }
 
 -(void)setTintColorFilter:(CAFilter *)filter{
     self.colorFilter = filter;
     self.layer.filters = @[ self.colorFilter , self.blurFilter ];
 }
-
 
 -(void)setQuality:(NSString *)quality{
     [self.blurFilter setValue:quality forKey:CKBlurViewQualityKey];

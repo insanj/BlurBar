@@ -9,23 +9,9 @@
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3;
 @end
 
-/*
-@interface SBDeviceLockController {
-	int _lockState;
-}
-
-+(id)sharedController;
+@interface UIStatusBarBackgroundView (BlurBar)
++(void)toggleHidden;
 @end
-
-@interface SBDeviceLockController (BlurBar)
--(BOOL)isUnlocked;
-@end
-
-%hook SBDeviceLockController
-%new -(BOOL)isUnlocked{
-	return (MSHookIvar<int>(self, "_lockState") != 1);
-}
-%end*/
 
 %hook UIStatusBarBackgroundView
 static CKBlurView *blurBar;
@@ -43,7 +29,9 @@ static BOOL shouldBeHidden;
 	UIStatusBarBackgroundView *view = %orig;
 
 	if(arg1.size.height <= 20.f){
-		NSDictionary *settings = [[NSDictionary alloc] initWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]];
+		[blurBar removeFromSuperview];
+		
+		NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]];
 
 		float blurAmount = [[settings objectForKey:@"blurAmount"] floatValue];
 		if(blurAmount == 0.f)
@@ -110,21 +98,21 @@ static BOOL shouldBeHidden;
 				break;	
 		}
 
-		[blurBar removeFromSuperview];
-		
         const CGFloat *rgb = CGColorGetComponents(blurTint.CGColor);
         CAFilter *tintFilter = [CAFilter filterWithName:@"colorAdd"];
         [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(CGColorGetAlpha(blurTint.CGColor))] forKey:@"inputColor"];
 
-     	blurBar = [[CKBlurView alloc] initWithFrame:blurFrame andColorFilter:tintFilter];
-		blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        blurBar = [[CKBlurView alloc] initWithFrame:arg1];
+     	[blurBar setTintColorFilter:tintFilter];
+     	[blurBar setFrame:blurFrame];
+		blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth; //this, and copying from *view don't work
 		blurBar.blurRadius = blurAmount;
 		blurBar.blurCroppingRect = blurFrame;
-		blurBar.alpha = blurAlpha;
+		blurBar.alpha = 0.f;
 		blurBar.hidden = shouldBeHidden;
-
-		[UIView animateWithDuration:0.01f animations:^{ blurBar.alpha = blurAlpha; }];
 		[view addSubview:blurBar];
+
+		[UIView animateWithDuration:0.5f animations:^{ blurBar.alpha = blurAlpha; }];
 	}
 
 	return view;
