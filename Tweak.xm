@@ -112,7 +112,7 @@ static BOOL shouldBeHidden;
 		blurBar.hidden = shouldBeHidden;
 		[view addSubview:blurBar];
 
-		[UIView animateWithDuration:0.5f animations:^{ blurBar.alpha = blurAlpha; }];
+		[UIView animateWithDuration:0.25f animations:^{ blurBar.alpha = blurAlpha; }];
 	}
 
 	return view;
