@@ -101,13 +101,12 @@ static BOOL shouldBeHidden;
         const CGFloat *rgb = CGColorGetComponents(blurTint.CGColor);
         CAFilter *tintFilter = [CAFilter filterWithName:@"colorAdd"];
         [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(CGColorGetAlpha(blurTint.CGColor))] forKey:@"inputColor"];
-
         blurBar = [[CKBlurView alloc] initWithFrame:arg1];
      	[blurBar setTintColorFilter:tintFilter];
-     	[blurBar setFrame:blurFrame];
-		blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth; //this, and copying from *view don't work
+     	[blurBar setFrame:CGRectMake(0, 0, fmax(self.frame.size.width, self.frame.size.height), self.frame.size.height)];
+		blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		blurBar.blurRadius = blurAmount;
-		blurBar.blurCroppingRect = blurFrame;
+		blurBar.blurCroppingRect = blurBar.frame;
 		blurBar.alpha = 0.f;
 		blurBar.hidden = shouldBeHidden;
 		[view addSubview:blurBar];
