@@ -13,6 +13,12 @@
 @end
 
 static CKBlurView *blurBar;
+void BlurBarSizeToFit(){
+	UIStatusBarBackgroundView *currView = MSHookIvar<UIStatusBarBackgroundView *>([UIApplication sharedApplication].statusBar, "_backgroundView");
+	float blurSize = [[[NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]] objectForKey:@"blurSize"] floatValue];
+	[blurBar setFrame:CGRectMake(currView.frame.origin.x, currView.frame.origin.y, currView.frame.size.width, currView.frame.size.height * ((blurSize>0.f)?blurSize:1.f))];
+}
+
 void BlurBarCreateIntoBackgroundView(NSNotification *notification){
 	NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]];
 	UIStatusBarBackgroundView *view = MSHookIvar<UIStatusBarBackgroundView *>([UIApplication sharedApplication].statusBar, "_backgroundView");
@@ -86,6 +92,7 @@ void BlurBarCreateIntoBackgroundView(NSNotification *notification){
     [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(CGColorGetAlpha(blurTint.CGColor))] forKey:@"inputColor"];
     
 	blurBar = [[CKBlurView alloc] initWithFrame:blurFrame];
+	blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
  	[blurBar setTintColorFilter:tintFilter];
 	blurBar.blurRadius = blurAmount;
 	blurBar.blurCroppingRect = blurBar.frame;
@@ -100,19 +107,12 @@ void BlurBarCreateIntoBackgroundView(NSNotification *notification){
 	else
 		[blurBar setHidden:NO];
 
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 		UIStatusBarBackgroundView *currView = MSHookIvar<UIStatusBarBackgroundView *>([UIApplication sharedApplication].statusBar, "_backgroundView");
-
-		float blurSize = [[settings objectForKey:@"blurSize"] floatValue];
-		if(blurSize > 0.f)
-			blurFrame.size.height *= blurSize;
-		[blurBar setFrame:blurFrame];
-
-		[UIView animateWithDuration:0.25f animations:^{
-			[currView addSubview:blurBar];
+		BlurBarSizeToFit();
+		[currView addSubview:blurBar];
+		[UIView animateWithDuration:0.1f animations:^{
 			blurBar.alpha = blurAlpha; 
-			blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-
 		}];
 	});
 }
@@ -125,4 +125,9 @@ void BlurBarCreateIntoBackgroundView(NSNotification *notification){
 	[[NSNotificationCenter defaultCenter] addObserverForName:@"SBDeviceLockStateChangedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification){
 		BlurBarCreateIntoBackgroundView(notification);
 	}];
+
+	[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationWillChangeStatusBarOrientationNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification){
+		BlurBarSizeToFit();
+	}];
+
 }
