@@ -13,6 +13,7 @@
 
 -(void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
 	[%c(UIStatusBarBackgroundView) toggleHidden];
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"CKToggleVisible" object:nil];
 }
 
 -(void)activator:(LAActivator *)activator abortEvent:(LAEvent *)event {

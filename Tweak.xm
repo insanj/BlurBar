@@ -118,6 +118,8 @@ static BOOL shouldBeHidden;
 }
 
 -(void)dealloc{
+	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+
 	blurBar = nil;
 	[blurBar release];
 

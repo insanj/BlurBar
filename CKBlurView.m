@@ -63,8 +63,14 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
 }
 
 -(instancetype)initWithFrame:(CGRect)frame{
+   [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(toggleVisible) name:@"CKToggleVisible" object:nil];
+
     self = [super initWithFrame:frame];
     return [self commonInit];
+}
+
+-(void)toggleVisible{
+    [self setHidden:!self.hidden];
 }
 
 -(void)setTintColorFilter:(CAFilter *)filter{
@@ -106,6 +112,8 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
 }
 
 -(void)dealloc{
+    [[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+ 
     _blurFilter = nil;
     _colorFilter = nil;
     _blurQuality = nil;

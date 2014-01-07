@@ -12,6 +12,8 @@
 
 #import <UIKit/UIKit.h>
 
+@interface NSDistributedNotificationCenter : NSNotificationCenter
+@end
 
 @interface CAFilter : NSObject
 
