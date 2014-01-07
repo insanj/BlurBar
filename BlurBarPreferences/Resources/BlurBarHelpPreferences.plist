@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>items</key>
+	<array>
+
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key>		<string>What does BlurBar do?</string>
+			<key>footerText</key> 	<string>BlurBar live-blurs the content beneath the iOS 7 statusbar. This is particularly helpful for users of Infiniboard, and similar tweaks, there content might be pushed underneath it. Although BlurBar works best on the homescreen, the option to have it visible on the lockscreen as well is always available.</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key>		<string>How does BlurBar work?</string>
+			<key>footerText</key> 	<string>BlurBar uses a dynamic, low-level gaussian blur, developed by Apple themselves for live-blurring Navigations Bars and "frosted glass" panes. Initially discovered and subclassed by Conrad Kramer, BlurBar uses a slightly modified version of the CoreGraphics Framework technique (CKBlurView) to provide the best possible blur of its type.</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key>		<string>Why is BlurBar's blur sometimes off?</string>
+			<key>footerText</key> 	<string>Although BlurBar uses a low-level, impressive blur technique, there will always be pitfalls. Using such a low blur radius (amount of blur) is not found commonly in iOS, and the performance was thus optimized for views such as the Control Center, instead of high-motion, high-visibilty areas, like the status bar.</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key>		<string>Can I hide BlurBar?</string>
+			<key>footerText</key> 	<string>Yep! Using Ryan Petrich's free super-tweak, Activator, it's possible to assign any action to hiding or showing BlurBar. If you encounter any bugs with this feature, it's most likely due to complications with the evasi0n jailbreak's root access, or Activator itself. Either way, it's best to send us all some detailed bug reports.</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key>		<string>Why isn't BlurBar system-wide?</string>
+			<key>footerText</key> 	<string>Not only would this be involve some techical complexities, and possibly drain battery life and overall performance, I felt it was only necessary at the homescreen, where no developer could touch the transparency of the overlay (which can get in the way of Infiniboard all the time)!</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key>		<string>Can you add ... to BlurBar?</string>
+			<key>footerText</key> 	<string>We'll see! Make sure to send me your ideas right away using the Contact section in the main Settings area, and I'll get back to you as soon as possible. BlurBar, however, is a free, open-source tweak, so I can't guarantee any support or "must-have" features. If you really, really need it, add it yourself!</string>
+		</dict>
+	</array>
+	<key>title</key>	<string>Help</string>
+</dict>
+</plist>

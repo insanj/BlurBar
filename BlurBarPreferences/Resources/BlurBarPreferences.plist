@@ -121,7 +121,6 @@
  			</array>
 		</dict>
 
-
 		<dict>
 			<key>cell</key>			<string>PSSwitchCell</string>
 			<key>defaults</key>		<string>com.insanj.blurbar</string>
@@ -131,6 +130,25 @@
 			<key>default</key> 		<false/>
 		</dict>
 
+		<dict>
+			<key>cell</key>			<string>PSSwitchCell</string>
+			<key>defaults</key>		<string>com.insanj.blurbar</string>
+			<key>label</key>		<string>Legacy Hide</string>
+			<key>key</key> 			<string>legacyHide</string>
+			<key>enabled</key> 		<true/>
+			<key>default</key> 		<false/>
+		</dict>
+
+		<dict>
+			<key>cell</key>				<string>PSGroupCell</string>
+		</dict>
+
+		<dict>
+			<key>cell</key>			<string>PSLinkCell</string>
+			<key>detail</key>		<string>BlurBarHelpListController</string>
+			<key>isController</key>	<true/>
+			<key>label</key>		<string>Help</string>
+		</dict>
 
 		<dict>
 			<key>cell</key>				<string>PSGroupCell</string>

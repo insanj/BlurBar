@@ -9,6 +9,27 @@
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3;
 @end
 
+@interface SBDeviceLockController {
+        int _lockState;
+}
+
++(id)sharedController;
+@end
+
+@interface SBDeviceLockController (BlurBar)
+-(BOOL)isUnlocked;
+@end
+
+%hook SBDeviceLockController
+%new -(BOOL)isUnlocked{
+        return (MSHookIvar<int>(self, "_lockState") != 1);
+}
+%end
+
+//kirb's idea: add using MSHookIvar to guarantee superview properties
+//@interface UIApplication (BlurBar)
+//-(UIStatusBar *)statusBar;
+//@end
 
 %hook UIStatusBarBackgroundView
 static CKBlurView *blurBar;
@@ -29,11 +50,16 @@ static BOOL shouldBeHidden;
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(show) name:@"CKShow" object:nil];
 
 	UIStatusBarBackgroundView *view = %orig;
+	NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]];
 
-	if(arg1.size.height <= 20.f){
+	if([[%c(SBDeviceLockController) sharedController] isUnlocked] && [[settings objectForKey:@"legacyHide"] boolValue])
+		[UIView animateWithDuration:0.5f animations:^{ blurBar.alpha = 0.f; } completion:^(BOOL finished){ [blurBar removeFromSuperview]; }];
+
+
+	else if(arg1.size.height <= 20.f){
+		//UIStatusBarBackgroundView *backingView = MSHookIvar<UIStatusBarBackgroundView *>([UIApplication sharedApplication].statusBar, "_backgroundView");
+
 		[blurBar removeFromSuperview];
-		
-		NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]];
 
 		float blurAmount = [[settings objectForKey:@"blurAmount"] floatValue];
 		if(blurAmount == 0.f)
@@ -117,7 +143,6 @@ static BOOL shouldBeHidden;
 			[blurBar makeMilky];
 
 		[view addSubview:blurBar];
-
 		[UIView animateWithDuration:0.25f animations:^{ blurBar.alpha = blurAlpha; }];
 	}
 
