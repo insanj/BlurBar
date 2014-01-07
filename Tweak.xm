@@ -103,14 +103,19 @@ static BOOL shouldBeHidden;
         const CGFloat *rgb = CGColorGetComponents(blurTint.CGColor);
         CAFilter *tintFilter = [CAFilter filterWithName:@"colorAdd"];
         [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(CGColorGetAlpha(blurTint.CGColor))] forKey:@"inputColor"];
+        
         blurBar = [[CKBlurView alloc] initWithFrame:arg1];
      	[blurBar setTintColorFilter:tintFilter];
      	[blurBar setFrame:CGRectMake(0, 0, fmax(self.frame.size.width, self.frame.size.height), self.frame.size.height)];
-		blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+		blurBar.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		blurBar.blurRadius = blurAmount;
 		blurBar.blurCroppingRect = blurBar.frame;
 		blurBar.alpha = 0.f;
 		[blurBar setHidden:shouldBeHidden];
+
+		if([[settings objectForKey:@"isMilky"] boolValue])
+			[blurBar makeMilky];
+
 		[view addSubview:blurBar];
 
 		[UIView animateWithDuration:0.25f animations:^{ blurBar.alpha = blurAlpha; }];

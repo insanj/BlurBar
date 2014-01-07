@@ -78,6 +78,30 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
     [self setHidden:NO];
 }
 
+-(void)makeMilky{
+    id innerColor = (id)[UIColor clearColor].CGColor;
+    id outerColor = (id)[UIColor colorWithWhite:0.5f alpha:0.75f].CGColor;
+
+    CAGradientLayer *horizontal = [CAGradientLayer layer];
+    horizontal.opacity = 0.75f;
+    horizontal.colors = @[outerColor, innerColor, innerColor, outerColor];
+    horizontal.locations = @[@(0.f), @(0.15f), @(0.85f), @(1.0f)];
+    horizontal.startPoint = CGPointMake(0.f, 0.5f);
+    horizontal.endPoint = CGPointMake(1.0f, 0.5f);
+    horizontal.bounds = self.bounds;
+    horizontal.anchorPoint = CGPointZero;
+
+    CAGradientLayer *vertical = [CAGradientLayer layer];
+    vertical.opacity = horizontal.opacity;
+    vertical.colors = horizontal.colors;
+    vertical.locations = horizontal.locations;
+    vertical.bounds = self.bounds;
+    vertical.anchorPoint = CGPointZero;
+
+    [self.layer addSublayer:horizontal];
+    [self.layer addSublayer:vertical];
+}
+
 -(void)setTintColorFilter:(CAFilter *)filter{
     self.colorFilter = filter;
     self.layer.filters = @[ self.colorFilter , self.blurFilter ];

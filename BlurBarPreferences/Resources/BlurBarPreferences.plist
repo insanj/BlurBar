@@ -8,7 +8,7 @@
 		<dict>
 			<key>cell</key>			<string>PSGroupCell</string>
 			<key>label</key>		<string>Adjustments</string>
-			<key>footerText</key> 	<string>Lock and unlock your device to guarantee effects are applied. With Activator installed, you can hide/unhide BlurBar with a simple action.</string>
+			<key>footerText</key> 	<string>Lock and unlock your device to guarantee effects are applied. With Activator installed, you can hide and unhide BlurBar with a simple action.</string>
 		</dict>
 
 		<dict>
@@ -120,6 +120,17 @@
  				<integer>16</integer>
  			</array>
 		</dict>
+
+
+		<dict>
+			<key>cell</key>			<string>PSSwitchCell</string>
+			<key>defaults</key>		<string>com.insanj.blurbar</string>
+			<key>label</key>		<string>Milky</string>
+			<key>key</key> 			<string>isMilky</string>
+			<key>enabled</key> 		<true/>
+			<key>default</key> 		<false/>
+		</dict>
+
 
 		<dict>
 			<key>cell</key>				<string>PSGroupCell</string>

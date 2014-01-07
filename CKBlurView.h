@@ -48,4 +48,5 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface CKBlurView : UIView
 @property (nonatomic, readwrite) BOOL blurEdges;
 
 -(void)setTintColorFilter:(CAFilter *)filter;
+-(void)makeMilky;
 @end
