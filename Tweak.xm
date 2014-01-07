@@ -9,23 +9,25 @@
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3;
 @end
 
-@interface UIStatusBarBackgroundView (BlurBar)
-+(void)toggleHidden;
-@end
 
 %hook UIStatusBarBackgroundView
 static CKBlurView *blurBar;
 static BOOL shouldBeHidden;
 
-%new +(void)toggleHidden{
-	shouldBeHidden = !shouldBeHidden;
-	if(shouldBeHidden)
-		[blurBar setHidden:YES];
-	else
-		[blurBar setHidden:NO];
+%new -(void)hide{
+	shouldBeHidden = YES;
+	[blurBar setHidden:YES];
+}
+
+%new -(void)show{
+	shouldBeHidden = NO;
+	[blurBar setHidden:NO];
 }
 
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3{
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"CKHide" object:nil];
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(show) name:@"CKShow" object:nil];
+
 	UIStatusBarBackgroundView *view = %orig;
 
 	if(arg1.size.height <= 20.f){
@@ -108,7 +110,7 @@ static BOOL shouldBeHidden;
 		blurBar.blurRadius = blurAmount;
 		blurBar.blurCroppingRect = blurBar.frame;
 		blurBar.alpha = 0.f;
-		blurBar.hidden = shouldBeHidden;
+		[blurBar setHidden:shouldBeHidden];
 		[view addSubview:blurBar];
 
 		[UIView animateWithDuration:0.25f animations:^{ blurBar.alpha = blurAlpha; }];
