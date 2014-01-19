@@ -30,7 +30,6 @@
 //<3 HASHBANG
 -(void)loadView{
 	[super loadView];
-
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(shareTapped:)];
 }
 
@@ -69,7 +68,7 @@
 }//end twitter
 
 -(void)mail{
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:me%40insanj.com?subject=BlurBar%20(1.2)%20Support"]];
+	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"mailto:me%40insanj.com?subject=BlurBar%20(1.1.1)%20Support"]];
 }
 @end
 

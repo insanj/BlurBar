@@ -54,6 +54,9 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
     self.blurQuality = CKBlurViewQualityDefault;
     self.blurRadius = 5.0f;   
 
+   [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"CKHide" object:nil];
+   [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(show) name:@"CKShow" object:nil];
+
     return self;
 }
 
@@ -63,9 +66,6 @@ static NSString * const CKBlurViewHardEdgesKey = @"inputHardEdges";
 }
 
 -(instancetype)initWithFrame:(CGRect)frame{
-   [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"CKHide" object:nil];
-   [[NSDistributedNotificationCenter defaultCenter] addObserver:self selector:@selector(show) name:@"CKShow" object:nil];
-
     self = [super initWithFrame:frame];
     return [self commonInit];
 }

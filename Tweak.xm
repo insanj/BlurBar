@@ -13,43 +13,58 @@
 -(id)initWithFrame:(CGRect)arg1 style:(id)arg2 backgroundColor:(id)arg3;
 @end
 
-static CKBlurView *blurBar;
-void BlurBarSizeToFit(){
-	float blurSize = [[[NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]] objectForKey:@"blurSize"] floatValue];
+@interface UIStatusBarBackgroundView (BlurBar)
++(CKBlurView *)sharedBlurBar;
++(void)blurBarSizeToFit;
++(void)blurBarCreateUsing:(NSNotification *)notification;
+@end
+
+%hook UIStatusBarBackgroundView
+static char kSharedBlurBarKey;
+
+%new +(CKBlurView *)sharedBlurBar{
+	CKBlurView *blurBar = objc_getAssociatedObject(self, &kSharedBlurBarKey);
+	if(!blurBar){
+		blurBar = [[CKBlurView alloc] init];
+		objc_setAssociatedObject(self, &kSharedBlurBarKey, blurBar, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	}
+
+	return blurBar;
+}
+
+%new +(void)blurBarSizeToFit{
+	CGFloat blurSize = [[[NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]] objectForKey:@"blurSize"] floatValue];
 
 	CGRect statusFrame = [[UIApplication sharedApplication].statusBar currentFrame];
 	if(UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)){
-		float height = statusFrame.size.height;
+		CGFloat height = statusFrame.size.height;
 		statusFrame.size.height = statusFrame.size.width;
 		statusFrame.size.width = height;
 	}
 
-	statusFrame.origin.x = 0.f;
-	statusFrame.size.width *= (blurSize>0.f)?blurSize:1.f;
+	statusFrame.origin.x = 0.0;
+	statusFrame.size.height *= (blurSize>0.0)?blurSize:1.0;
 
-	//always logs correct values
-	NSLog(@"--- sizing from:%@ to:%@", NSStringFromCGRect(blurBar.frame), NSStringFromCGRect(statusFrame));
-
-	//neither sync, async, or vanilla work
-	dispatch_async(dispatch_get_main_queue(), ^{
-		[blurBar setFrame:statusFrame];
-	});
+	[[%c(UIStatusBarBackgroundView) sharedBlurBar] setFrame:statusFrame];
 }
 
-void BlurBarCreateIntoBackgroundView(NSNotification *notification){
+%new +(void)blurBarCreateUsing:(NSNotification *)notification{
 	NSDictionary *settings = [NSDictionary dictionaryWithContentsOfFile:[NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]];
-	UIStatusBarBackgroundView *view = MSHookIvar<UIStatusBarBackgroundView *>([UIApplication sharedApplication].statusBar, "_backgroundView");
 	
-	float blurAmount = [[settings objectForKey:@"blurAmount"] floatValue];
-	if(blurAmount == 0.f)
-		blurAmount = 10.0f;
+	CGFloat blurAmount = [[settings objectForKey:@"blurAmount"] floatValue];
+	if(blurAmount == 0.0)
+		blurAmount = 10.0;
 
-	CGRect blurFrame = view.frame;
-	blurFrame.size.width = fmax(view.frame.size.height, view.frame.size.width);
-	
-	float blurAlpha = [[settings objectForKey:@"blurAlpha"] floatValue];
-	if(blurAlpha == 0.f)
-		blurAlpha = 1.0f;
+	CGRect blurFrame = [[UIApplication sharedApplication].statusBar currentFrame];
+	if(UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)){
+		CGFloat height = blurFrame.size.height;
+		blurFrame.size.height = blurFrame.size.width;
+		blurFrame.size.width = height;
+	}
+
+	CGFloat blurAlpha = [[settings objectForKey:@"blurAlpha"] floatValue];
+	if(blurAlpha == 0.0)
+		blurAlpha = 1.0;
 
 	UIColor *blurTint; //Thanks, http://clrs.cc!
 	switch([[settings objectForKey:@"blurTint"] intValue]){
@@ -107,45 +122,46 @@ void BlurBarCreateIntoBackgroundView(NSNotification *notification){
     CAFilter *tintFilter = [CAFilter filterWithName:@"colorAdd"];
     [tintFilter setValue:@[@(rgb[0]), @(rgb[1]), @(rgb[2]), @(CGColorGetAlpha(blurTint.CGColor))] forKey:@"inputColor"];
     
-	blurBar = [[CKBlurView alloc] initWithFrame:blurFrame];
+	CKBlurView *blurBar = [%c(UIStatusBarBackgroundView) sharedBlurBar];
  	[blurBar setTintColorFilter:tintFilter];
 	blurBar.blurRadius = blurAmount;
 	blurBar.blurCroppingRect = blurBar.frame;
-	blurBar.alpha = 0.f;
+	blurBar.alpha = 0.0;
 
 	if([[settings objectForKey:@"isMilky"] boolValue])
 		[blurBar makeMilky];
 
-	if(notification && [notification.userInfo[@"kSBNotificationKeyState"] boolValue] && [[settings objectForKey:@"legacyHide"] boolValue])
+	if(notification && [notification.userInfo[@"kSBNotificationKeyState"] boolValue] && [[settings objectForKey:@"legacyHide"] boolValue]){
+		NSLog(@"---- hiding");
 		[blurBar setHidden:YES];
+	}
 
 	else
 		[blurBar setHidden:NO];
 
-	//has to dispatch, because the notification is called before (?!) the homescreen launches
-	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-		UIStatusBarBackgroundView *currView = MSHookIvar<UIStatusBarBackgroundView *>([UIApplication sharedApplication].statusBar, "_backgroundView");
-		[currView addSubview:blurBar];
-		BlurBarSizeToFit(); //only ever works for portrait, lockscreen statusbar,
-							//must be an issue with the calling of notification
+	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+	    UIStatusBarBackgroundView *view = MSHookIvar<UIStatusBarBackgroundView *>([UIApplication sharedApplication].statusBar, "_backgroundView");
 
-		[UIView animateWithDuration:0.2f animations:^{
+		[view addSubview:blurBar];
+		[%c(UIStatusBarBackgroundView) blurBarSizeToFit];
+
+		[UIView animateWithDuration:0.1 animations:^{
 			blurBar.alpha = blurAlpha;
 		}];
 	});
 }
+%end
 
 %ctor{
 	[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification){
-		BlurBarCreateIntoBackgroundView(nil);
+		[%c(UIStatusBarBackgroundView) blurBarCreateUsing:nil];
 	}];
 
 	[[NSNotificationCenter defaultCenter] addObserverForName:@"SBDeviceLockStateChangedNotification" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification){
-		BlurBarCreateIntoBackgroundView(notification);
+		[%c(UIStatusBarBackgroundView) blurBarCreateUsing:notification];
 	}];
 
 	[[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidChangeStatusBarOrientationNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification){
-		BlurBarSizeToFit();
+		[%c(UIStatusBarBackgroundView) blurBarSizeToFit];
 	}];
-
 }

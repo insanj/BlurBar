@@ -154,7 +154,7 @@
 			<key>cell</key>				<string>PSGroupCell</string>
 			<key>label</key> 			<string>Contact</string>
 			<key>footerAlignment</key> 	<integer>1</integer>
-			<key>footerText</key>		<string>Thanks for using BlurBar (1.2)!&#10;&#10;(CC) 2014 Julian Weiss&#10;License and source available online.</string>
+			<key>footerText</key>		<string>Thanks for using BlurBar (1.1.1)!&#10;&#10;(CC) 2014 Julian Weiss&#10;License and source available online.</string>
 		</dict>
 
 		<dict>

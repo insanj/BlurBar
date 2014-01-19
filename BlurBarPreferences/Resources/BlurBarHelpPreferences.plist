@@ -8,7 +8,7 @@
 		<dict>
 			<key>cell</key>			<string>PSGroupCell</string>
 			<key>label</key>		<string>What does BlurBar do?</string>
-			<key>footerText</key> 	<string>BlurBar live-blurs the content beneath the iOS 7 statusbar. This is particularly helpful for users of Infiniboard, and similar tweaks, there content might be pushed underneath it. Although BlurBar works best on the homescreen, the option to have it visible on the lockscreen as well is always available.</string>
+			<key>footerText</key> 	<string>BlurBar live-blurs the content beneath the iOS 7 statusbar. This is particularly helpful for users of Infiniboard, and similar tweaks, where content might be pushed underneath it. Although BlurBar works best on the homescreen, the option to have it visible on the lockscreen as well is always available.</string>
 		</dict>
 
 		<dict>
