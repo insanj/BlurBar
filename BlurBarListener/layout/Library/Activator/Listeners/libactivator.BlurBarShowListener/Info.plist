@@ -1,4 +1,4 @@
 {
 	title = "Show BlurBar";
-	description = "Show the current statusbar blur.";
+	description = "Cause BlurBar to re-appear.";
 }
