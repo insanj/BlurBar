@@ -5,15 +5,12 @@
 //  Created by Conrad Kramer on 10/25/13.
 //  Copyright (c) 2013 Kramer Software Productions, LLC. All rights reserved.
 //
-//  MRC-Augmented by Julian Weiss on 1/4/14.
+//  BlurBar and MRC-specific and augmentations by Julian Weiss on 1/4/14.
 //  Copyright (c) 2014 Julian Weiss.
 //  
 
 
 #import <UIKit/UIKit.h>
-
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-@end
 
 @interface CAFilter : NSObject
 
@@ -25,7 +22,7 @@ extern NSString * const CKBlurViewQualityDefault;
 
 extern NSString * const CKBlurViewQualityLow;
 
-NS_CLASS_AVAILABLE_IOS(7_0) @interface CKBlurView : UIView
+@interface CKBlurView : UIView
 
 /**
  Quality of the blur. The lower the quality, the more performant the blur. Must be one of `CKBlurViewQualityDefault` or `CKBlurViewQualityLow`. Defaults to `CKBlurViewQualityDefault`.
@@ -47,6 +44,7 @@ NS_CLASS_AVAILABLE_IOS(7_0) @interface CKBlurView : UIView
  */
 @property (nonatomic, readwrite) BOOL blurEdges;
 
--(void)setTintColorFilter:(CAFilter *)filter;
--(void)makeMilky;
+- (void)setTintColorFilter:(CAFilter *)filter;
+- (void)makeMilky;
+
 @end

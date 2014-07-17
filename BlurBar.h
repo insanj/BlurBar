@@ -2,8 +2,8 @@
 #import <UIKit/UIApplication+Private.h>
 #import <CoreGraphics/CoreGraphics.h>
 #import <QuartzCore/QuartzCore.h>
+#import <Foundation/NSDistributedNotificationCenter.h>
 #import "CKBlurView.h"
-
 #import "substrate.h"
 
 #define PREFS_PATH [NSHomeDirectory() stringByAppendingPathComponent:@"/Library/Preferences/com.insanj.blurbar.plist"]
@@ -17,9 +17,18 @@
 
 @interface UIStatusBar : UIView
 
+- (id)_backgroundView;
+
 @end
 
-@interface UIStatusBarBackgroundView (BlurBar)
+@interface CKBlurView (BlurBar)
+
+- (NSDictionary *)blurBarSettings;
+- (void)reloadBlurBarSettings:(NSNotification *)notification;
+
+@end
+
+@interface UIStatusBar (BlurBar)
 
 + (CKBlurView *)sharedBlurBar;
 + (void)blurBarLayoutFromPreferences;
