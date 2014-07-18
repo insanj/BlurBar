@@ -1,12 +1,11 @@
 #import "BlurBar.h"
 
 /****************************************************************************************/
-/*************************** Blur Bar Settings Management *******************************/
+/**************************** Settings Access Management ********************************/
 /****************************************************************************************/
 
 static char * kBlurBarCachedSettingsKey;
 static NSString *kBlurBarReloadSettingsNotification = @"BBReloadSettingsNotification";
-static NSString *kBlurBarReloadSettingsNotificationWiredSettingsKey = @"wiredSettings";
 
 %hook CKBlurView
 
@@ -28,8 +27,7 @@ static NSString *kBlurBarReloadSettingsNotificationWiredSettingsKey = @"wiredSet
 }
 
 %new - (void)reloadBlurBarSettings:(NSNotification *)notification {
-	NSDictionary *wiredBlurBarSettings = (NSDictionary *)notification.userInfo[kBlurBarReloadSettingsNotificationWiredSettingsKey];
-	objc_setAssociatedObject(self, &kBlurBarCachedSettingsKey, wiredBlurBarSettings, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	objc_setAssociatedObject(self, &kBlurBarCachedSettingsKey, [NSDictionary dictionaryWithContentsOfFile:PREFS_PATH], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (void)layoutSubviews {
@@ -126,6 +124,19 @@ static NSString *kBlurBarReloadSettingsNotificationWiredSettingsKey = @"wiredSet
 - (void)dealloc {
 	%orig();
 	[[NSDistributedNotificationCenter defaultCenter] removeObserver:self];
+}
+
+%end
+
+/****************************************************************************************/
+/***************************** Settings Cache Management ********************************/
+/****************************************************************************************/
+
+%hook SBLockScreenManager
+
+- (void)_finishUIUnlockFromSource:(int)source withOptions:(id)options { 
+	%orig();
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:kBlurBarReloadSettingsNotification object:nil];
 }
 
 %end
