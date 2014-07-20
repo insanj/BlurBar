@@ -155,10 +155,10 @@ static CKBlurView * sharedBlurBar;
 
 	// Sneaky check to ensure we're on the home screen when altering blurBar
 	if (self.frame.size.height <= 20.0) {
-		if (!sharedBlurBar) {
+		if (!sharedBlurBar.superview) {
 			UIStatusBarBackgroundView *backgroundView = (UIStatusBarBackgroundView *)[UIApplication sharedApplication].statusBar._backgroundView;
-
-			sharedBlurBar = [[CKBlurView alloc] init];
+			if(!sharedBlurBar)
+				sharedBlurBar = [[CKBlurView alloc] init];
 			[sharedBlurBar layoutSubviews];
 			[backgroundView addSubview:sharedBlurBar];
 			// NSLog(@"[BlurBar] status bar added %@ to %@", sharedBlurBar, backgroundView);
