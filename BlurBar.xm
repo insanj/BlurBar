@@ -133,10 +133,16 @@ static NSString *kBlurBarReloadSettingsNotification = @"BBReloadSettingsNotifica
 /****************************************************************************************/
 
 %hook SBLockScreenManager
+- (void)lockUIFromSource:(int)source withOptions:(id)options {
+	%orig();
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"CKHide" object:nil];
 
+}
 - (void)_finishUIUnlockFromSource:(int)source withOptions:(id)options { 
 	%orig();
 	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:kBlurBarReloadSettingsNotification object:nil];
+	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"CKShow" object:nil];
+
 }
 
 %end
@@ -152,9 +158,9 @@ static CKBlurView * sharedBlurBar;
 - (void)layoutSubviews {
 	%orig();
 	%log;
-
+	BOOL isLocked = MSHookIvar<BOOL>([objc_getClass("SBLockScreenManager") sharedInstanceIfExists], "_isUILocked");
 	// Sneaky check to ensure we're on the home screen when altering blurBar
-	if (self.frame.size.height <= 20.0) {
+	if (/*self.frame.size.height <= 20.0 && */ !isLocked) {
 		if (!sharedBlurBar.superview) {
 			UIStatusBarBackgroundView *backgroundView = (UIStatusBarBackgroundView *)[UIApplication sharedApplication].statusBar._backgroundView;
 			if(!sharedBlurBar)
@@ -164,11 +170,11 @@ static CKBlurView * sharedBlurBar;
 			// NSLog(@"[BlurBar] status bar added %@ to %@", sharedBlurBar, backgroundView);
 		}
 
-		sharedBlurBar.alpha = 1.0;
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"CKShow" object:nil];
 	}
 
-	else if (sharedBlurBar) {
-		sharedBlurBar.alpha = 0.0;
+	else if (sharedBlurBar && !sharedBlurBar.hidden) {
+		[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"CKHide" object:nil];
 	}
 }
 
