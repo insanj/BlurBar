@@ -133,16 +133,16 @@ static NSString *kBlurBarReloadSettingsNotification = @"BBReloadSettingsNotifica
 /****************************************************************************************/
 
 %hook SBLockScreenManager
+
 - (void)lockUIFromSource:(int)source withOptions:(id)options {
 	%orig();
 	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"CKHide" object:nil];
-
 }
+
 - (void)_finishUIUnlockFromSource:(int)source withOptions:(id)options { 
 	%orig();
 	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:kBlurBarReloadSettingsNotification object:nil];
 	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:@"CKShow" object:nil];
-
 }
 
 %end
@@ -158,7 +158,7 @@ static CKBlurView * sharedBlurBar;
 - (void)layoutSubviews {
 	%orig();
 	%log;
-	BOOL isLocked = MSHookIvar<BOOL>([objc_getClass("SBLockScreenManager") sharedInstanceIfExists], "_isUILocked");
+	BOOL isLocked = MSHookIvar<BOOL>([%c(SBLockScreenManager) sharedInstanceIfExists], "_isUILocked");
 	// Sneaky check to ensure we're on the home screen when altering blurBar
 	if (/*self.frame.size.height <= 20.0 && */ !isLocked) {
 		if (!sharedBlurBar.superview) {

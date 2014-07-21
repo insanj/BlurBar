@@ -4,11 +4,35 @@
 <dict>
     <key>items</key>
 	<array>
+		<dict>
+			<key>cell</key>			<string>PSGroupCell</string>
+			<key>label</key> 		<string>Activation</string>
+			<key>footerText</key> 	<string>BlurBar will automatically hide when locking, unhide when unlocking.</string>
+		</dict>
+
+		<dict>
+			<key>cell</key> 				<string>PSLinkCell</string>
+			<key>label</key> 				<string>Show Method</string>
+			<key>id</key> 					<string>ActivationMethods</string>
+			<key>isController</key> 		<true/>
+			<key>bundle</key> 				<string>LibActivator</string>			
+			<key>activatorListener</key> 	<string>com.insanj.blurbar.show</string>
+		</dict>
+
+		<dict>
+			<key>cell</key> 				<string>PSLinkCell</string>
+			<key>label</key> 				<string>Hide Method</string>
+			<key>id</key> 					<string>ActivationMethods</string>
+			<key>isController</key> 		<true/>
+			<key>bundle</key> 				<string>LibActivator</string>			
+			<key>activatorListener</key> 	<string>com.insanj.blurbar.hide</string>
+		</dict>
+
 
 		<dict>
 			<key>cell</key>			<string>PSGroupCell</string>
-			<key>label</key>		<string>Adjustments</string>
-			<key>footerText</key> 	<string>Lock your device to apply changes. With Activator installed, you can hide and unhide BlurBar with separate actions.</string>
+			<key>label</key> 		<string>Adjustments</string>
+			<key>footerText</key> 	<string>Lock your device to apply changes.</string>
 		</dict>
 
 		<dict>
@@ -132,14 +156,21 @@
 
 		<dict>
 			<key>cell</key>				<string>PSGroupCell</string>
-			<key>footerText</key>		<string>BlurBar 1.2&#10;© 2014 Julian (insanj) Weiss&#10;Source available online.</string>
+			<key>footerText</key>		<string>© 2014 Julian (insanj) Weiss&#10;Huge thanks to RiDan for major 1.2 work.&#10;Source available online.</string>
 		</dict>
+
 
 		<dict>
 			<key>cell</key>			<string>PSLinkCell</string>
 			<key>detail</key>		<string>BlurBarHelpListController</string>
 			<key>isController</key>	<true/>
 			<key>label</key>		<string>Help</string>
+		</dict>
+
+		<dict>
+			<key>cellClass</key> 	<string>BlurBarTwitterCell</string>
+			<key>label</key> 		<string>Developer</string>
+			<key>user</key> 		<string>insanj</string>
 		</dict>
 
 	</array>

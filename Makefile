@@ -10,8 +10,7 @@ BlurBar_FRAMEWORKS = UIKit QuartzCore
 BlurBar_PRIVATE_FRAMEWORKS = CoreGraphics
 
 include $(THEOS_MAKE_PATH)/tweak.mk
-SUBPROJECTS += BlurBarPreferences
-SUBPROJECTS += BlurBarListener
+SUBPROJECTS += BlurBarListener BlurBarPreferences
 include $(THEOS_MAKE_PATH)/aggregate.mk
 
 before-stage::

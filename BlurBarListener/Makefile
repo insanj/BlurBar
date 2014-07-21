@@ -3,7 +3,7 @@ ARCHS = armv7 arm64
 include theos/makefiles/common.mk
 
 TWEAK_NAME = BlurBarListener
-BlurBarListener_OBJC_FILES = Listener.xm
+BlurBarListener_OBJC_FILES = BlurBarListener.xm
 BlurBarListener_FRAMEWORKS = Foundation UIKit
 BlurBarListener_LDFLAGS = -lactivator -L../theos/lib
 

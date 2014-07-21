@@ -35,3 +35,11 @@
 + (void)blurBarSizeToFit;
 
 @end
+
+@interface SBLockScreenManager {
+	BOOL _isUILocked;
+}
+
++ (SBLockScreenManager *)sharedInstanceIfExists;
+
+@end

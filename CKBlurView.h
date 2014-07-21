@@ -11,6 +11,7 @@
 
 
 #import <UIKit/UIKit.h>
+#import <Foundation/NSDistributedNotificationCenter.h>
 
 @interface CAFilter : NSObject
 
@@ -44,6 +45,7 @@ extern NSString * const CKBlurViewQualityLow;
  */
 @property (nonatomic, readwrite) BOOL blurEdges;
 
+- (instancetype)commonInit;
 - (void)setTintColorFilter:(CAFilter *)filter;
 - (void)makeMilky;
 

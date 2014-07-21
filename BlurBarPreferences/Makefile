@@ -4,7 +4,7 @@ ARCHS = armv7 arm64
 include theos/makefiles/common.mk
 
 BUNDLE_NAME = BlurBarPreferences
-BlurBarPreferences_FILES = BlurBarPreferences.xm
+BlurBarPreferences_FILES = BlurBarPreferences.xm BlurBarTwitterCell.m
 BlurBarPreferences_INSTALL_PATH = /Library/PreferenceBundles
 BlurBarPreferences_FRAMEWORKS = UIKit Twitter
 BlurBarPreferences_PRIVATE_FRAMEWORKS = Preferences
