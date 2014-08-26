@@ -110,11 +110,11 @@ static NSString *kBlurBarReloadSettingsNotification = @"BBReloadSettingsNotifica
 	CGFloat blurSize = [settings[@"blurSize"] floatValue];
 		
 	CGRect statusFrame = [UIApplication sharedApplication].statusBar.frame;
-	if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
+	/*if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
 		CGFloat height = statusFrame.size.height;
 		statusFrame.size.height = statusFrame.size.width;
 		statusFrame.size.width = height;
-	}
+	}*/
 
 	statusFrame.origin.x = 0.0;
 	statusFrame.size.height *= (blurSize > 0.0 ? blurSize : 1.0);
