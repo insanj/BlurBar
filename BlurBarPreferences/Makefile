@@ -1,7 +1,7 @@
 TARGET =: clang
 ARCHS = armv7 arm64
 
-include theos/makefiles/common.mk
+include ../theos/makefiles/common.mk
 
 BUNDLE_NAME = BlurBarPreferences
 BlurBarPreferences_FILES = BlurBarPreferences.xm BlurBarTwitterCell.m
