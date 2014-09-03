@@ -1,31 +1,31 @@
-#import "BlurBarListener.h"
+#import "FSSwitchDataSource.h"
+#import "FSSwitchPanel.h"
+#import <notify.h>
+#import "../Common.h"
 
-@implementation BlurBarListener
+@interface BlurBarListenerSwitch : NSObject <FSSwitchDataSource>
+@end
 
-+ (void)load {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	[[LAActivator sharedInstance] registerListener:[[self alloc] initForNotificationName:@"CKShow"] forName:@"com.insanj.blurbar.show"];
-	[[LAActivator sharedInstance] registerListener:[[self alloc] initForNotificationName:@"CKHide"] forName:@"com.insanj.blurbar.hide"];
-	[pool release];
+@implementation BlurBarListenerSwitch
+
+- (FSSwitchState)stateForSwitchIdentifier:(NSString *)switchIdentifier
+{
+	Boolean enabledExist;
+	Boolean enabledValue = CFPreferencesGetAppBooleanValue(kBlurBarEnabledKey, kSpringBoard, &enabledExist);
+	BOOL tweakEnabled = !enabledExist ? YES : enabledValue;
+	return tweakEnabled ? FSSwitchStateOn : FSSwitchStateOff;
 }
 
-- (id)initForNotificationName:(NSString *)notificationName {
-	self = [super init];
+- (void)applyState:(FSSwitchState)newState forSwitchIdentifier:(NSString *)switchIdentifier
+{
+	if (newState == FSSwitchStateIndeterminate)
+		return;
 
-	if (self) {
-		_notificationName = notificationName;
-	}
-
-	return self;
+	CFBooleanRef enabled = newState == FSSwitchStateOn ? kCFBooleanTrue : kCFBooleanFalse;
+	CFPreferencesSetAppValue(kBlurBarEnabledKey, enabled, kSpringBoard);
+	CFPreferencesAppSynchronize(kSpringBoard);
+	
+	notify_post(kNotifyKey);
 }
 
-- (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
-	[[NSDistributedNotificationCenter defaultCenter] postNotificationName:_notificationName object:nil];
-}
-
-- (void)dealloc {
-	[_notificationName release];
-	[super dealloc];
-}
-
-@end 
+@end
